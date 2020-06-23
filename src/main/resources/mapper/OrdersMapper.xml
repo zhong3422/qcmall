@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.OrdersMapper">
+  <resultMap id="BaseResultMap" type="com.bean.Orders">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="u_id" jdbcType="INTEGER" property="uId" />
+    <result column="statu" jdbcType="VARCHAR" property="statu" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="addressee" jdbcType="VARCHAR" property="addressee" />
+    <result column="phonenumber" jdbcType="VARCHAR" property="phonenumber" />
+    <result column="creationtime" jdbcType="TIMESTAMP" property="creationtime" />
+    <result column="deliverytime" jdbcType="TIMESTAMP" property="deliverytime" />
+    <result column="completiontime" jdbcType="TIMESTAMP" property="completiontime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, u_id, statu, address, addressee, phonenumber, creationtime, deliverytime, completiontime
+  </sql>
+  <select id="selectByExample" parameterType="com.bean.OrdersExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from orders
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from orders
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from orders
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bean.OrdersExample">
+    delete from orders
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bean.Orders">
+    insert into orders (id, u_id, statu, 
+      address, addressee, phonenumber, 
+      creationtime, deliverytime, completiontime
+      )
+    values (#{id,jdbcType=INTEGER}, #{uId,jdbcType=INTEGER}, #{statu,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{addressee,jdbcType=VARCHAR}, #{phonenumber,jdbcType=VARCHAR}, 
+      #{creationtime,jdbcType=TIMESTAMP}, #{deliverytime,jdbcType=TIMESTAMP}, #{completiontime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bean.Orders" useGeneratedKeys="true" keyProperty="id" >
+    <selectKey resultType="INTEGER" keyProperty="id" order="AFTER">
+    	select @@identity
+    </selectKey>
+    insert into orders
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="uId != null">
+        u_id,
+      </if>
+      <if test="statu != null">
+        statu,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="addressee != null">
+        addressee,
+      </if>
+      <if test="phonenumber != null">
+        phonenumber,
+      </if>
+      <if test="creationtime != null">
+        creationtime,
+      </if>
+      <if test="deliverytime != null">
+        deliverytime,
+      </if>
+      <if test="completiontime != null">
+        completiontime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="uId != null">
+        #{uId,jdbcType=INTEGER},
+      </if>
+      <if test="statu != null">
+        #{statu,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="addressee != null">
+        #{addressee,jdbcType=VARCHAR},
+      </if>
+      <if test="phonenumber != null">
+        #{phonenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="creationtime != null">
+        #{creationtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deliverytime != null">
+        #{deliverytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="completiontime != null">
+        #{completiontime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+    
+  
+    
+  </insert>
+  <select id="countByExample" parameterType="com.bean.OrdersExample" resultType="java.lang.Long">
+    select count(*) from orders
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update orders
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.uId != null">
+        u_id = #{record.uId,jdbcType=INTEGER},
+      </if>
+      <if test="record.statu != null">
+        statu = #{record.statu,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addressee != null">
+        addressee = #{record.addressee,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phonenumber != null">
+        phonenumber = #{record.phonenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creationtime != null">
+        creationtime = #{record.creationtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deliverytime != null">
+        deliverytime = #{record.deliverytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.completiontime != null">
+        completiontime = #{record.completiontime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update orders
+    set id = #{record.id,jdbcType=INTEGER},
+      u_id = #{record.uId,jdbcType=INTEGER},
+      statu = #{record.statu,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
+      addressee = #{record.addressee,jdbcType=VARCHAR},
+      phonenumber = #{record.phonenumber,jdbcType=VARCHAR},
+      creationtime = #{record.creationtime,jdbcType=TIMESTAMP},
+      deliverytime = #{record.deliverytime,jdbcType=TIMESTAMP},
+      completiontime = #{record.completiontime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bean.Orders">
+    update orders
+    <set>
+      <if test="uId != null">
+        u_id = #{uId,jdbcType=INTEGER},
+      </if>
+      <if test="statu != null">
+        statu = #{statu,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="addressee != null">
+        addressee = #{addressee,jdbcType=VARCHAR},
+      </if>
+      <if test="phonenumber != null">
+        phonenumber = #{phonenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="creationtime != null">
+        creationtime = #{creationtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deliverytime != null">
+        deliverytime = #{deliverytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="completiontime != null">
+        completiontime = #{completiontime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bean.Orders">
+    update orders
+    set u_id = #{uId,jdbcType=INTEGER},
+      statu = #{statu,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      addressee = #{addressee,jdbcType=VARCHAR},
+      phonenumber = #{phonenumber,jdbcType=VARCHAR},
+      creationtime = #{creationtime,jdbcType=TIMESTAMP},
+      deliverytime = #{deliverytime,jdbcType=TIMESTAMP},
+      completiontime = #{completiontime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  
+  
+   <resultMap id="DetailsResultMap" type="com.bean.Orders">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="u_id" jdbcType="INTEGER" property="uId" />
+    <result column="statu" jdbcType="VARCHAR" property="statu" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="addressee" jdbcType="VARCHAR" property="addressee" />
+    <result column="phonenumber" jdbcType="VARCHAR" property="phonenumber" />
+    <result column="creationtime" jdbcType="TIMESTAMP" property="creationtime" />
+    <result column="deliverytime" jdbcType="TIMESTAMP" property="deliverytime" />
+    <result column="completiontime" jdbcType="TIMESTAMP" property="completiontime" />
+    <collection property="orderitems" ofType="Orderitems">
+	    <id column="iid" jdbcType="INTEGER" property="id" />
+	    <result column="o_id" jdbcType="INTEGER" property="oId" />
+	    <result column="sku_id" jdbcType="INTEGER" property="skuId" />
+	    <result column="iprice" jdbcType="DOUBLE" property="price" />
+	    <result column="number" jdbcType="INTEGER" property="number" />
+	    <result column="express" jdbcType="VARCHAR" property="express" />
+	    <association property="goodsSku" javaType="GoodsSku">
+	     <id column="gid" jdbcType="INTEGER" property="id" />
+		    <result column="spu_id" jdbcType="INTEGER" property="spuId" />
+		    <result column="name" jdbcType="VARCHAR" property="name" />
+		    <result column="gprice" jdbcType="DOUBLE" property="price" />
+		    <result column="inventory" jdbcType="INTEGER" property="inventory" />
+		    <result column="image" jdbcType="VARCHAR" property="image" />
+		    <result column="salesvolume" jdbcType="INTEGER" property="salesvolume" />
+		     <association property="goodsSpu" javaType="GoodsSpu">
+			     <id column="gpid" jdbcType="INTEGER" property="id" />
+			    <result column="gpname" jdbcType="VARCHAR" property="name" />
+			    <result column="catalog2_id" jdbcType="INTEGER" property="catalog2Id" />
+			    <result column="gpsalesvolume" jdbcType="INTEGER" property="salesvolume" />
+			    <result column="gpprice" jdbcType="DOUBLE" property="price" />
+			    <result column="description" jdbcType="VARCHAR" property="description" />
+			    <result column="gpimage" jdbcType="VARCHAR" property="image" />
+		     </association>
+	    </association>
+    </collection>
+  </resultMap>
+  
+  
+  
+   <sql id="Details_Column_List">
+    orders.id, u_id, statu, address, addressee, phonenumber, creationtime, deliverytime, completiontime,
+     orderitems.id iid, o_id, sku_id,orderitems.price iprice, number, express,
+     goods_sku.id gid, spu_id, goods_sku.name,goods_sku.price gprice, goods_sku.inventory, goods_sku.image, goods_sku.salesvolume ,
+     goods_spu.id gpid, goods_spu.name gpname, goods_spu.catalog2_id, goods_spu.salesvolume gpsalesvolume, goods_spu.price gpprice, goods_spu.description, goods_spu.image gpimage 
+  </sql>
+  
+  
+  <select id="selectWithDetailsByExample" parameterType="com.bean.OrdersExample" resultMap="DetailsResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Details_Column_List" />
+    FROM orders JOIN orderitems JOIN goods_sku JOIN goods_spu ON orders.id=orderitems.o_id AND orderitems.sku_id=goods_sku.id AND goods_sku.spu_id=goods_spu.id 
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  
+  
+  <select id="selectWithDetailsByPrimaryKey" parameterType="java.lang.Integer" resultMap="DetailsResultMap">
+    select 
+    <include refid="Details_Column_List" />
+   FROM orders JOIN orderitems JOIN goods_sku JOIN goods_spu ON orders.id=orderitems.o_id AND orderitems.sku_id=goods_sku.id AND goods_sku.spu_id=goods_spu.id 
+    where orders.id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  
+  
+  
+    <select id="getNewOrders" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from orders ORDER BY id DESC LIMIT 0,1
+  </select>
+  
+  
+  
+</mapper>

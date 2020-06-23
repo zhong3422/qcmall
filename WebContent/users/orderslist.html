@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="GBK">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="../bootstrap-4.4.1-dist/css/bootstrap.min.css" >
+<script src="../js/jquery-3.4.1.min.js"></script>
+<script src="../bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+<title>订单列表</title>
+</head>
+<body>
+<h3>订单列表</h3>
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="all-tab" data-toggle="tab" href="#all" role="tab" aria-controls="home" aria-selected="true">全部</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="waitPay-tab" data-toggle="tab" href="#waitPay" role="tab" aria-controls="profile" aria-selected="false">待付款</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="waitSend-tab" data-toggle="tab" href="#waitSend" role="tab" aria-controls="profile" aria-selected="false">待发货</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="waitConfirm-tab" data-toggle="tab" href="#waitConfirm" role="tab" aria-controls="contact" aria-selected="false">待收货</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="done-tab" data-toggle="tab" href="#done" role="tab" aria-controls="contact" aria-selected="false">已完成</a>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab"></div>
+  <div class="tab-pane fade" id="waitPay" role="tabpanel" aria-labelledby="waitPay-tab"></div>
+  <div class="tab-pane fade" id="waitSend" role="tabpanel" aria-labelledby="waitSend-tab"></div>
+  <div class="tab-pane fade" id="waitConfirm" role="tabpanel" aria-labelledby="waitConfirm-tab"></div>
+  <div class="tab-pane fade" id="done" role="tabpanel" aria-labelledby="done-tab"></div>
+</div>
+
+
+
+	<div id="orders"> 
+	
+	
+	</div>
+
+
+
+
+<script type="text/javascript">
+var pageNumber=1;
+	$(function () {
+		$.ajax({
+			url:"../orders",
+			data:"pageNumber=1",
+			cache:false,
+			type:"get",
+			success:function(result){
+				console.log(result);
+				buildList(result);
+			}
+		});
+	});
+
+	function buildList(result) {
+		//alert(result.list)
+		$.each(result.list,function(index,item){
+			//alert(item.uid+item.username);
+		//	var uidTd=$("<td></td>").append(item.uid);
+		//		console.log(item.gImage);
+				var img;
+			
+			
+				var header=$("<h5 ></h5>").addClass("card-header").append("订单号"+item.id+item.statu).attr("onclick","window.open('../getOrdersById?oid="+item.id+"')");
+				
+					var table=$("<table></table>").addClass("table");
+				$.each(item.orderitems,function(index,i){
+					
+				
+					var oitems=$("<tr></tr>");
+					if(i.goodsSku.goodsSpu.image !=null){
+						var img=("<img src='../"+i.goodsSku.goodsSpu.image +"' class='align-self-start mr-3'  style='width: 100px' >");
+						oitems.append("<td>"+img+"</td>");
+					}else{
+						var img=("<img src='../image/goodsSpu/Default.jpg' class='align-self-start mr-3'  style='width: 100px' >");
+						oitems.append("<td>"+img+"</td>");
+						
+					}
+					
+					oitems.append("<td>"+i.goodsSku.name+"</td>").append("<td>"+i.price+"*"+i.number+"</td>").append("<td>"+i.goodsSku.goodsSpu.description+"</td>");
+					table.append(oitems);
+					
+				});
+					var cardBody=$("<div></div>").addClass("card-body").append(table);
+					var cardDiv=$("<div></div>").addClass("card").append(header).append(cardBody);
+				
+				
+				
+				$("#all").append(cardDiv);
+				if(item.statu=="待付款"){
+					$("#waitPay").append(cardDiv.clone());
+				}
+				if(item.statu=="待发货"){
+					$("#waitSend").append(cardDiv.clone());
+				}
+				if(item.statu=="待收货"){
+					$("#waitConfirm").append(cardDiv.clone());
+				}
+				if(item.statu=="已完成"){
+					$("#done").append(cardDiv.clone());
+				}
+				//cardDiv.appendTo("#all");
+				
+				
+				
+				
+		});
+	}
+	
+	function add(){
+		pageNumber++;
+		$.ajax({
+			url:"../orders",
+			data:"pageNumber="+pageNumber,
+			type:"get",
+			cache:false,
+			success:function(result){
+				console.log(result);
+				buildList(result);
+			}
+		});
+	}
+	
+	
+	
+	$(document).ready(function () { //本人习惯这样写了
+	    $(window).scroll(function () {
+	        //$(window).scrollTop()这个方法是当前滚动条滚动的距离
+	        //$(window).height()获取当前窗体的高度
+	        //$(document).height()获取当前文档的高度
+	        var bot = 50; //bot是底部距离的高度
+	        if ((bot + $(window).scrollTop()) >= ($(document).height() - $(window).height())) {
+	           //当底部基本距离+滚动的高度〉=文档的高度-窗体的高度时；
+	            //我们需要去异步加载数据了
+	           // $.getJSON("url", { page: "2" }, function (str) { alert(str); });
+	           //alert("a");
+	           add();
+	        }
+	    });
+	});
+	
+</script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="js/jquery-3.4.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="static/view-design/dist/styles/iview.css">
+    <script type="text/javascript" src="static/vue/dist/vue.min.js"></script>
+    <script type="text/javascript" src="static/view-design/dist/iview.min.js"></script>
+    <link rel="stylesheet" href="bootstrap-4.4.1-dist/css/bootstrap.min.css" >
+<script src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+
+<div id="searchDiv" style="text-align: center">
+<!-- 
+<i-Row type="flex" justify="center" align="top" class="code-row-bg">
+	 <i-Col span="18" push="6"><Auto-Complete
+        v-model="value1"
+        :data="data1"
+        @on-search="handleSearch1"
+        placeholder="input here"
+        style="width:200px"
+        ></Auto-Complete></i-Col>
+        <i-Col span="6" pull="18"><i-Button shape="circle" icon="ios-search" @click='search'>Search</i-Button></i-Col>
+</i-Row>
+ -->
+
+    <Auto-Complete
+        v-model="value1"
+        :data="data1"
+        @on-search="handleSearch1"
+        placeholder="input here"
+        style="width:200px"
+        ></Auto-Complete>
+        <i-Button shape="circle" icon="ios-search" @click='search'>Search</i-Button>
+</div>
+
+
+
+
+
+
+	<div>
+		<div class="container">
+		<div class="row row-cols-4" id="goodsList">
+		</div>
+		<button onclick=" getData()">加载更多</button>
+	</div>
+		
+	
+	</div>
+
+<script type="text/javascript">
+var pageNumber=0;
+var keyword="";
+	
+
+	function buildList(result) {
+		//alert(result.list)
+		$.each(result.list,function(index,item){
+			//alert(item.uid+item.username);
+			var uidTd=$("<td></td>").append(item.uid);
+				console.log(item.gImage);
+				var img;
+			if(item.image != null){
+				img=$("<img>").attr("src",''+item.image).attr("style","width:100%");
+			}else{
+				img=$("<img>").attr("src","image/goodsSpu/Default.jpg").attr("style","width:100%");;
+			}
+				$("<div></div>").addClass("col").attr("style","text-align: center").attr("onclick","window.open('spu/"+item.id+"')").append(img).append(item.name).appendTo("#goodsList");
+			
+		});
+	}
+	
+	
+	function buildCarousel(list) {
+		//console.log(result.list[1]);
+		//alert(result);
+		for(var i=0;i<3;i++){
+			var src;
+			if(list[i].gImage != null){
+				src="image/goods/"+list[i].gImage;
+			}else{
+				src="image/goods/Default.jpg";
+			}
+		$(".carouselImage").eq(i).attr("src",src);
+			
+		}
+	}
+	
+	
+	
+	function getData(){
+		pageNumber++;
+		
+		$.ajax({
+			url:"searchSpu",
+			data:"keyword="+keyword+"&pageNumber="+pageNumber,
+			type:"get",
+			cache:false,
+			success:function(result){
+				console.log(result);
+				buildList(result);
+			}
+		});
+	}
+	
+	
+
+	
+	
+	
+	$(document).ready(function () { //本人习惯这样写了
+		
+	getData();
+	
+	
+	
+		
+	    $(window).scroll(function () {
+	        //$(window).scrollTop()这个方法是当前滚动条滚动的距离
+	        //$(window).height()获取当前窗体的高度
+	        //$(document).height()获取当前文档的高度
+	        var bot = 50; //bot是底部距离的高度
+	        if ((bot + $(window).scrollTop()) >= ($(document).height() - $(window).height())) {
+	           //当底部基本距离+滚动的高度〉=文档的高度-窗体的高度时；
+	            //我们需要去异步加载数据了
+	           // $.getJSON("url", { page: "2" }, function (str) { alert(str); });
+	           //alert("a");
+	           getData();
+	        }
+	    });
+	});
+	
+</script>
+
+<script>
+//注意：导航 依赖 element 模块，否则无法进行功能性操作
+
+</script>
+<script type="text/javascript">
+var vue6= new Vue({
+    el:'#searchDiv',
+    data () {
+    return {
+        value1: '',
+        data1: []
+    }
+},
+methods: {
+    handleSearch1 (value) {
+    	data1 =[];
+    	var a=[];
+    	$.ajax({
+    		url:"keywordsSearch",
+			data:"Keyword="+value,
+			type:"get",
+			cache:false,
+			success:function(result){
+				console.log(result);
+				
+				$.each(result.list,function(index,item){
+					console.log(item.name);
+					
+					a.push(item.name);
+				});
+				
+			}
+    	});
+    	
+    	this.data1 =a;
+    	//this.data1 =[1,2,3];
+    	//this.data1.push(4,5);
+      //  this.data1 = !value ? [] : [
+      //      value,
+      //      value + value,
+      //      value + value + value
+      //  ];
+    },
+    search() {
+    	//alert(this.value1);
+    	$("#goodsList").html("");
+    	pageNumber=0;
+    	keyword=this.value1;
+    	getData();
+    }
+   
+}
+
+});
+
+</script>
+
+</body>
+</html>

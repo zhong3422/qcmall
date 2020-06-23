@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ViewUI example</title>
+   <!--  <link rel="stylesheet" type="text/css" href="static/view-design/dist/styles/iview.css">--> 
+    <!-- <script type="text/javascript" src="static/view-design/dist/iview.min.js"></script> -->
+    <!-- <script type="text/javascript" src="http://vuejs.org/js/vue.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="static/view-design/dist/styles/iview.css">
+    <script type="text/javascript" src="static/vue/dist/vue.min.js"></script>
+    <script type="text/javascript" src="static/view-design/dist/iview.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <i-button @click="show">Click me!</i-button>
+    <i-Button type="warning">Warning</i-Button>
+    
+    <Modal v-model="visible" title="Welcome">Welcome to ViewUI</Modal>
+</div>
+<div id="app2">
+    <i-Input v-model="value" placeholder="Enter something..." style="width: 300px" />
+    <!-- <i-Button type="warning">Warning</i-Button> -->
+</div>
+
+<div id="app3" >
+    <Radio-Group v-model="border" @on-change="a()">
+        <Radio label="金斑蝶" border></Radio>
+        <Radio label="爪哇犀牛" border></Radio>
+        <Radio label="印度黑羚" border></Radio>
+    </Radio-Group>
+    <Radio-Group v-model="border1" @on-change="a()">
+        <Radio label="金斑蝶" border></Radio>
+        <Radio label="爪哇犀牛" border></Radio>
+        <Radio label="印度黑羚" border></Radio>
+    </Radio-Group>
+  
+    <i-Button type="warning" @click="getdata">Warning</i-Button>
+    
+</div>
+
+<div id="app4">
+    <i-form :model="formItem" :label-width="80">
+        <form-item>
+
+       
+    <Radio-Group v-model="border">
+        <Radio label="金斑蝶1" border></Radio>
+        <Radio label="爪哇犀牛" border></Radio>
+        <Radio label="印度黑羚" border></Radio>
+    </Radio-Group>
+    <Radio-Group v-model="bordera">
+        <Radio label="金斑蝶2" border></Radio>
+        <Radio label="爪哇犀牛" border></Radio>
+        <Radio label="印度黑羚" border></Radio>
+    </Radio-Group>
+
+</form-item>
+ </i-form>
+</div>
+
+<button onclick="a()">aaaa</button>
+
+<div id="app5">
+    <div>
+    <i-Button @click="background('success')">显示成功提示</i-Button>
+</div>
+</div>
+
+<div id="app6">
+    <Auto-Complete
+        v-model="value1"
+        :data="data1"
+        @on-search="handleSearch1"
+        placeholder="input here"
+        style="width:200px"></Auto-Complete>
+</div>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            visible: false
+        },
+        methods: {
+            show: function () {
+                this.visible = true;
+            }
+        }
+    })
+
+    new Vue({
+        el: '#app2',
+        data () {
+            return {
+                value: ''
+            }
+        },
+        methods: {
+            show: function () {
+                this.visible = true;
+            }
+        }
+    })
+
+   var vue3= new Vue({
+        el: '#app3',
+        data () {
+            return {
+                border: '金斑蝶',
+                border1: '金斑蝶',
+                k:''
+            }
+        }
+        ,
+        methods: {
+            getdata: function () {
+                // this.visible = true;
+                //alert(this.border+"|"+this.border1);
+                return this.border+"|"+this.border1;
+            }
+            
+        },
+        
+        // watch:{
+        //     border: function () {
+        //         // this.visible = true;
+        //         alert(this.border);
+        //     },
+        //     function(){
+        //         alert("aaa");
+        //     }
+        // }
+        
+    })
+
+    var vue4= new Vue({
+        el: '#app4',
+        data () {
+            return {
+                border: '金斑蝶',
+                bordera: '金斑蝶'
+            }
+        }
+        ,methods: {
+            getdata: function () {
+                // this.visible = true;
+                //alert(this.border);
+            }
+        },
+        watch:{
+            border: function () {
+                // this.visible = true;
+                //alert(this.border);
+            },
+            border1:function(){
+                alert("aaa");
+            }
+        }
+    })
+
+    function a(){
+        //alert("Lll");
+       // alert(vue3.border);
+        var s=vue3.getdata();
+        alert(s);
+        vue6.data1=[1,2,3,4,5];
+        //alert(vue4.value);
+    }
+
+
+    new Vue({
+        el:'#app5',
+        methods: {
+            background (type) {
+                this.$Message[type]({
+                    background: true,
+                    content: '这是一条带背景色的通知'
+                });
+            }
+        }
+
+    })
+
+    // new Vue({
+    //     el: '#app5',
+    //     // data: {
+    //     //     visible: false
+    //     // },
+    //     methods: {
+    //         background (type) {
+    //             this.$Message[type]({
+    //                 background: true,
+    //                 content: '这是一条带背景色的通知'
+    //             });
+    //         }
+    //     }
+    // })
+
+       var vue6= new Vue({
+            el:'#app6',
+            data () {
+            return {
+                value1: '',
+                data1: []
+            }
+        },
+        methods: {
+            handleSearch1 (value) {
+                this.data1 = !value ? [] : [
+                    value,
+                    value + value,
+                    value + value + value
+                ];
+            }
+        }
+
+        });
+
+  </script>
+</body>
+</html>

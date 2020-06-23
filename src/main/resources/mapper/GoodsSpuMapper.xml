@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.GoodsSpuMapper">
+  <resultMap id="BaseResultMap" type="com.bean.GoodsSpu">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="catalog2_id" jdbcType="INTEGER" property="catalog2Id" />
+    <result column="salesvolume" jdbcType="INTEGER" property="salesvolume" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, name, catalog2_id, salesvolume, price, description, image
+  </sql>
+  <select id="selectByExample" parameterType="com.bean.GoodsSpuExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from goods_spu
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from goods_spu
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from goods_spu
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bean.GoodsSpuExample">
+    delete from goods_spu
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bean.GoodsSpu">
+    insert into goods_spu (id, name, catalog2_id, 
+      salesvolume, price, description, 
+      image)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{catalog2Id,jdbcType=INTEGER}, 
+      #{salesvolume,jdbcType=INTEGER}, #{price,jdbcType=DOUBLE}, #{description,jdbcType=VARCHAR}, 
+      #{image,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bean.GoodsSpu">
+    insert into goods_spu
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="catalog2Id != null">
+        catalog2_id,
+      </if>
+      <if test="salesvolume != null">
+        salesvolume,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="image != null">
+        image,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="catalog2Id != null">
+        #{catalog2Id,jdbcType=INTEGER},
+      </if>
+      <if test="salesvolume != null">
+        #{salesvolume,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        #{image,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bean.GoodsSpuExample" resultType="java.lang.Long">
+    select count(*) from goods_spu
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update goods_spu
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.catalog2Id != null">
+        catalog2_id = #{record.catalog2Id,jdbcType=INTEGER},
+      </if>
+      <if test="record.salesvolume != null">
+        salesvolume = #{record.salesvolume,jdbcType=INTEGER},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=DOUBLE},
+      </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.image != null">
+        image = #{record.image,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update goods_spu
+    set id = #{record.id,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      catalog2_id = #{record.catalog2Id,jdbcType=INTEGER},
+      salesvolume = #{record.salesvolume,jdbcType=INTEGER},
+      price = #{record.price,jdbcType=DOUBLE},
+      description = #{record.description,jdbcType=VARCHAR},
+      image = #{record.image,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bean.GoodsSpu">
+    update goods_spu
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="catalog2Id != null">
+        catalog2_id = #{catalog2Id,jdbcType=INTEGER},
+      </if>
+      <if test="salesvolume != null">
+        salesvolume = #{salesvolume,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bean.GoodsSpu">
+    update goods_spu
+    set name = #{name,jdbcType=VARCHAR},
+      catalog2_id = #{catalog2Id,jdbcType=INTEGER},
+      salesvolume = #{salesvolume,jdbcType=INTEGER},
+      price = #{price,jdbcType=DOUBLE},
+      description = #{description,jdbcType=VARCHAR},
+      image = #{image,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <!-- 查看详情 -->
+  
+  
+  <resultMap id="DetailsResultMap" type="com.bean.GoodsSpu">
+   <id column="pid" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="catalog2_id" jdbcType="INTEGER" property="catalog2Id" />
+    <result column="salesvolume" jdbcType="INTEGER" property="salesvolume" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <collection property="goodsSaleAttrs" ofType="GoodsSaleAttr">
+		<id column="aid" jdbcType="INTEGER" property="id" />
+			    <result column="spu_id" jdbcType="INTEGER" property="spuId" />
+			    <result column="sale_attr_id" jdbcType="INTEGER" property="saleAttrId" />
+		<association property="saleAttr" javaType="saleAttr">
+			     <id column="sid" jdbcType="INTEGER" property="id" />
+    				<result column="sname" jdbcType="VARCHAR" property="name" />
+				 </association>
+			 <collection property="goodsSaleAttrValues" ofType="GoodsSaleAttrValue">
+				   <id column="vid" jdbcType="INTEGER" property="id" />
+				    <result column="spu_id" jdbcType="INTEGER" property="spuId" />
+				    <result column="sale_attr_id" jdbcType="INTEGER" property="saleAttrId" />
+				    <result column="value" jdbcType="VARCHAR" property="value" />
+			</collection>
+	 </collection>
+	  <collection property="goodsImages" ofType="GoodsImages">
+	  	<id column="images.id" jdbcType="INTEGER" property="id" />
+	    <result column="images_gid" jdbcType="INTEGER" property="gId" />
+	    <result column="path" jdbcType="VARCHAR" property="path" />
+	  </collection>
+  </resultMap>
+  
+  <sql id="Details_Column_List">
+    goods_spu.id pid, goods_spu.name, goods_spu.catalog2_id, goods_spu.salesvolume, goods_spu.price, goods_spu.description, image,
+     goods_sale_attr.id aid, goods_sale_attr.spu_id, goods_sale_attr.sale_attr_id,
+      goods_sale_attr_value.id AS vid, goods_sale_attr_value.spu_id, goods_sale_attr_value.sale_attr_id, goods_sale_attr_value.value,
+      sale_attr.id sid,sale_attr.name sname ,goods_Images.g_id images_gid,path 
+  </sql>
+  
+   <select id="selectWithDetailsByPrimaryKey" parameterType="java.lang.Integer" resultMap="DetailsResultMap">
+    select 
+    <include refid="Details_Column_List" />
+   from 
+     goods_spu JOIN goods_sale_attr JOIN goods_sale_attr_value join sale_attr  
+    ON  goods_spu.id=goods_sale_attr.spu_id 
+    	AND goods_sale_attr.id=goods_sale_attr_value.sale_attr_id 
+    		and sale_attr.id=goods_sale_attr.sale_attr_id LEFT join goods_Images on goods_spu.id=goods_Images.g_id 
+    where goods_spu.id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectNewSpu" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	SELECT id, name, catalog2_id, salesvolume, price, description, image
+  	 FROM goods_spu ORDER BY id DESC LIMIT 0,1;		
+  </select>
+  
+   <select id="keywordsSearch" parameterType="com.bean.GoodsSpuExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    name
+    from goods_spu
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause} 
+    </if>
+  </select>
+  
+  
+  
+</mapper>

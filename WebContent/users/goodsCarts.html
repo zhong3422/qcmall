@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="GBK">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="../bootstrap-4.4.1-dist/css/bootstrap.min.css" >
+<script src="../js/jquery-3.4.1.min.js"></script>
+<script src="../bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+	function del(cid) {
+		//alert(cid);
+		$.ajax({
+			url:"../goodsCarts/"+cid,
+			type:"DELETE",
+			success:function(result){
+				//alert(result);
+				//console.log(result);
+				location.reload(); 
+				//buildList(result);
+			}
+		});
+	}
+
+
+
+	
+
+	
+	$(document).ready(function(){
+		
+		
+		$("#checkAll").click(function(){
+			
+			//alert($("#checkAll").prop('checked'));
+			$(".check").attr("checked",$("#checkAll").prop('checked'));
+			
+			
+			
+		});
+		 
+		 
+		 $('#buy').click(function() {
+			//	alert("lll");
+			var data="";
+				$.each($(".check:checked"),function(){
+					//alert($(this).parents("tr").find("td:eq(4)").find("input:eq(0)").val());
+					//alert($(this).parents("tr").find("td:eq(0)").find("input:eq(1)").val());
+					data+=("&number="+$(this).parents("tr").find("td:eq(4)").find("input:eq(0)").val()+"&gId="+$(this).parents("tr").find("td:eq(0)").find("input:eq(2)").val())
+				});
+				//alert(data)
+				
+				window.open("../forebuy?"+data);
+				
+			});
+
+	});
+	
+	
+
+	
+	function setClick() {
+		$(".check").click(function(){
+			//var b=$(".check:checked").length==$(".check").length;
+			//alert(b);
+			//$("#checkAll").attr("checked",false);
+			//alert();
+			
+		});
+		
+		
+		 $(".add").click(function(){
+				// alert("llll");
+			   var n=$(this).prev().val();
+			   var num=parseInt(n)+1;
+			   if(num==0){ return;}
+			   //$(this).prev().val(num);
+			    var n=$(this).prev();
+			      var cId=$(this).parents("tr").find("input:eq(1)").val();
+			     // var cNumber=$(this).parents("tr").find("input:eq(2)").val();
+				   // alert(cId);
+			      
+			      $.ajax({
+						url:"../updateGoodsCarts",
+						type:"post",
+						data:"id="+cId+"&number="+num,
+						success:function(result){
+							 n.val(num);
+						}
+					});
+			 });
+		   $(".reduce").click(function(){
+				// alert("lll");
+			   var n=$(this).next().val();
+			   var num=parseInt(n)-1;
+			   if(num==0){ return}
+			   var n=$(this).next();
+			   var cId=$(this).parents("tr").find("input:eq(1)").val();
+			      $.ajax({
+						url:"../updateGoodsCarts",
+						type:"post",
+						data:"id="+cId+"&number="+num,
+						success:function(result){
+							 n.val(num);
+							
+						}
+					});
+			  });
+	}
+	
+	
+</script>
+<title>购物车</title>
+</head>
+<body>
+
+
+<form action="forebuy" id="cartFrom" style="margin-bottom: 100px">
+<table class="table table-striped" id="cartlist">
+	<tr>
+		<th><input id="checkAll" type="checkbox">全选</th>
+		<th></th>
+		<th>商品</th>
+		<th>单价</th>
+		<th>数量</th>
+		<th>操作</th>
+	</tr>
+	
+	
+	
+	
+	
+	
+	
+	
+</table>
+</form>
+
+
+<nav class="navbar fixed-bottom navbar-light bg-info text-white">
+<a class="navbar-brand" href="#"> </a>
+  <button type="button" id="buy" class="btn btn-success">购买</button>
+</nav>
+
+
+<script type="text/javascript">
+var pageNumber=0;
+	$(function () {
+		add();
+	});
+
+	function buildList(result) {
+		//alert(result.list)
+		$.each(result.list,function(index,item){
+			//alert(item.uid+item.username);
+			var uidTd=$("<td></td>").append(item.uid);
+				//console.log(item.goodsSku.goodsSpu.image);
+				var img;
+			if(item.goodsSku.goodsSpu.image != null){
+				//img=$("<img>").attr("src","../image/goods/"+item.gImage).attr("style","width:100%");
+				img="<img src='../"+item.goodsSku.goodsSpu.image+"'class='align-self-start mr-3' alt='...' style='width: 90px'>";
+			}else{
+				//img=$("<img>").attr("src","../image/goods/Default.jpg").attr("style","width:100%");;
+				//<img src="image/goods/Default.jpg" class="align-self-start mr-3"
+					//alt="..." style="width: 90px">
+				img="<img src='../image/goodsSpu/Default.jpg' class='align-self-start mr-3' alt='...' style='width: 90px'>";
+			}
+			
+			var td1=$("<td></td>").append("<input class='check' name='check' type='checkbox' id='customCheck1'><input name='gId' hidden='true' value='"+item.id+"'><input name='gId' hidden='true' value='"+item.goodsSku.id+"'>");
+			var td2=$("<td></td>").append(img);
+			var td3=$("<td></td>").append(item.goodsSku.name);
+			var td4=$("<td></td>").append(item.goodsSku.price);
+			var td5=$("<td></td>").append("<button class='reduce' type='button'>-</button><input id='num' name='number' value='"+item.number+"' style='width: 50px'><button class='add' type='button'>+</button>");
+			var td6=$("<td></td>").append("<button type='button' onclick='del("+item.id+")'>删除</button>");
+			var tr=$("<tr></tr>");
+			tr.append(td1).append(td2).append(td3).append(td4).append(td5).append(td6);
+			$("#cartlist").append(tr);
+			$("td").attr("style","vertical-align: middle");
+			
+				//$("<div></div>").addClass("col").attr("style","text-align: center").attr("onclick","window.open('../goodsDetails/"+item.gId+"')").append(img).append(item.gName).appendTo("#goodsList");
+			
+		});
+	}
+	
+	function add(){
+		pageNumber++;
+		$.ajax({
+			url:"../goodsCarts",
+			data:"pageNumber="+pageNumber,
+			type:"get",
+			cache:false,
+			success:function(result){
+				console.log(result);
+				buildList(result);
+				
+				setClick();
+				
+				
+			}
+		});
+	}
+	
+	
+	function build_users_table_add(result) {
+		//alert(result.list)
+		$.each(result.list,function(index,item){
+			//alert(item.uid+item.username);
+			var uidTd=$("<td></td>").append(item.uid);
+			var usernameId=$("<td></td>").append(item.username);
+			var passwordTd=$("<td></td>").append(item.password);
+			$("<tr></tr>").append(uidTd).append(usernameId).append(passwordTd).appendTo("#users_table tbody");
+			
+		});
+	}
+	
+	
+	
+	$(document).ready(function () { //本人习惯这样写了
+	    $(window).scroll(function () {
+	        //$(window).scrollTop()这个方法是当前滚动条滚动的距离
+	        //$(window).height()获取当前窗体的高度
+	        //$(document).height()获取当前文档的高度
+	        var bot = 50; //bot是底部距离的高度
+	        if ((bot + $(window).scrollTop()) >= ($(document).height() - $(window).height())) {
+	           //当底部基本距离+滚动的高度〉=文档的高度-窗体的高度时；
+	            //我们需要去异步加载数据了
+	           // $.getJSON("url", { page: "2" }, function (str) { alert(str); });
+	           //alert("a");
+	           add();
+	        }
+	    });
+	});
+	
+</script>
+
+
+
+</body>
+</html>
